@@ -326,6 +326,8 @@ class QrCodeCaptureActivity : AppCompatActivity(), QrCodeGraphicTracker.BarcodeU
         }
     }
 
+    //TODO: sort barcodes distance from center (see onTap)
+    //Check if barcode is valid (checksum etc)
     override fun onBarcodeDetected(barcode: Barcode) {
         val data = Intent()
         data.putExtra(BarcodeObject, barcode)
