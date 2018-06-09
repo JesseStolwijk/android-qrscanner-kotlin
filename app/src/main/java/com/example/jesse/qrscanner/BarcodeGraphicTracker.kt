@@ -9,9 +9,9 @@ import com.google.android.gms.vision.barcode.Barcode
 
 class BarcodeGraphicTracker(private val mOverlay: GraphicOverlay<BarcodeGraphic>,
                             private var mGraphic: BarcodeGraphic,
-                            private val context: Context) : Tracker<Barcode>()  {
+                            context: Context) : Tracker<Barcode>()  {
 
-    private lateinit var mBarcodeUpdateListener: BarcodeUpdateListener
+    private val mBarcodeUpdateListener: BarcodeUpdateListener
 
     init {
         if (context is BarcodeUpdateListener) {
@@ -26,35 +26,20 @@ class BarcodeGraphicTracker(private val mOverlay: GraphicOverlay<BarcodeGraphic>
         fun onBarcodeDetected(barcode: Barcode)
     }
 
-    /**
-     * Start tracking the detected item instance within the item overlay.
-     */
     override fun onNewItem(id: Int, item: Barcode) {
         mGraphic.id = id
         mBarcodeUpdateListener.onBarcodeDetected(item)
     }
 
-    /**
-     * Update the position/characteristics of the item within the overlay.
-     */
     override fun onUpdate(detectionResults: Detector.Detections<Barcode>, item: Barcode) {
         mOverlay.add(mGraphic)
         mGraphic.updateItem(item)
     }
 
-    /**
-     * Hide the graphic when the corresponding object was not detected.  This can happen for
-     * intermediate frames temporarily, for example if the object was momentarily blocked from
-     * view.
-     */
     override fun onMissing(p0: Detector.Detections<Barcode>?) {
         mOverlay.remove(mGraphic)
     }
 
-    /**
-     * Called when the item is assumed to be gone for good. Remove the graphic annotation from
-     * the overlay.
-     */
     override fun onDone() {
         mOverlay.remove(mGraphic)
     }
