@@ -168,16 +168,12 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
      */
     override fun onPause() {
         super.onPause()
-        if (mPreview != null) {
-            mPreview!!.stop()
-        }
+        mPreview?.stop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (mPreview != null) {
-            mPreview!!.release()
-        }
+        mPreview?.release()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,

@@ -9,15 +9,13 @@ import java.util.*
 
 
 class GraphicOverlay<T : GraphicOverlay.Graphic>(context: Context, attrs: AttributeSet) : View(context, attrs) {
-    val mLock = Object()
+    val mLock = Any()
     var mPreviewWidth : Int = 0
     var mWidthScaleFactor = 1.0f
     var mPreviewHeight : Int = 0
     var mHeightScaleFactor = 1.0f
     var mFacing = CameraSource.CAMERA_FACING_BACK
     val mGraphics = mutableSetOf<T>()
-
-
 
 
     abstract class Graphic(private val overlay: GraphicOverlay<Graphic>) {

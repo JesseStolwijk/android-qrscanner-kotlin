@@ -74,10 +74,8 @@ class CameraSourcePreview(private val mContext: Context, attrs: AttributeSet) : 
     }
 
     fun release() {
-        if (mCameraSource != null) {
-            mCameraSource!!.release()
-            mCameraSource = null
-        }
+        mCameraSource?.release()
+        mCameraSource = null
     }
 
     @RequiresPermission(Manifest.permission.CAMERA)

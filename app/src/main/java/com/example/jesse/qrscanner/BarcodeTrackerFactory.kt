@@ -13,5 +13,4 @@ internal class BarcodeTrackerFactory(private val mGraphicOverlay: GraphicOverlay
         val graphic = BarcodeGraphic(mGraphicOverlay)
         return BarcodeGraphicTracker(mGraphicOverlay, graphic, mContext)
     }
-
 }

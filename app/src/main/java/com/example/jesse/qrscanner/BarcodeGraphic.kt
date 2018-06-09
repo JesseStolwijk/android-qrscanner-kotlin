@@ -42,13 +42,10 @@ class BarcodeGraphic internal constructor(overlay: GraphicOverlay<*>) : GraphicO
         postInvalidate()
     }
 
-    /**
-     * Draws the barcode annotations for position, size, and raw value on the supplied canvas.
-     */
     override fun draw(canvas: Canvas) {
         val barcode = this.barcode ?: return
 
-        // Draws the bounding box around the barcode.
+        // Draws bounding box
         val rect = RectF(barcode.boundingBox)
         rect.left = translateX(rect.left)
         rect.top = translateY(rect.top)
@@ -56,7 +53,7 @@ class BarcodeGraphic internal constructor(overlay: GraphicOverlay<*>) : GraphicO
         rect.bottom = translateY(rect.bottom)
         canvas.drawRect(rect, mRectPaint)
 
-        // Draws a label at the bottom of the barcode indicate the barcode value that was detected.
+        // Draw label
         canvas.drawText(barcode.rawValue, rect.left, rect.bottom, mTextPaint)
     }
 

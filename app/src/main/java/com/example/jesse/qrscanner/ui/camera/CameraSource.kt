@@ -30,9 +30,6 @@ import java.nio.ByteBuffer
 import java.util.ArrayList
 import java.util.HashMap
 
-// Note: This requires Google Play Services 8.1 or higher, due to using indirect byte buffers for
-// storing images.
-
 /**
  * Manages the camera in conjunction with an underlying
  * [com.google.android.gms.vision.Detector].  This receives preview frames from the camera at
@@ -55,17 +52,13 @@ import java.util.HashMap
  *
  */
 class CameraSource
-//==============================================================================================
-// Private
-//==============================================================================================
-
 /**
  * Only allow creation via the builder class.
  */
 private constructor() {
 
     private var mContext: Context? = null
-    private val mCameraLock = Any()
+    private val mCameraLock = Object()
     private var mCamera: Camera? = null
 
     var cameraFacing = CAMERA_FACING_BACK
@@ -113,10 +106,6 @@ private constructor() {
     @StringDef(Camera.Parameters.FLASH_MODE_ON, Camera.Parameters.FLASH_MODE_OFF, Camera.Parameters.FLASH_MODE_AUTO, Camera.Parameters.FLASH_MODE_RED_EYE, Camera.Parameters.FLASH_MODE_TORCH)
     @Retention(RetentionPolicy.SOURCE)
     private annotation class FlashMode
-
-    //==============================================================================================
-    // Builder
-    //==============================================================================================
 
     /**
      * Builder for configuring and creating an associated camera source.
@@ -201,9 +190,6 @@ private constructor() {
         }
     }
 
-    //==============================================================================================
-    // Bridge Functionality for the Camera1 API
-    //==============================================================================================
 
     /**
      * Callback interface used to signal the moment of actual image capture.
@@ -265,17 +251,13 @@ private constructor() {
         fun onAutoFocusMoving(start: Boolean)
     }
 
-    //==============================================================================================
-    // Public
-    //==============================================================================================
-
     /**
      * Stops the camera and releases the resources of the camera and underlying detector.
      */
     fun release() {
         synchronized(mCameraLock) {
             stop()
-            mFrameProcessor!!.release()
+            mFrameProcessor?.release()
         }
     }
 
@@ -295,15 +277,9 @@ private constructor() {
 
             mCamera = createCamera()
 
-            // SurfaceTexture was introduced in Honeycomb (11), so if we are running and
-            // old version of Android. fall back to use SurfaceView.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                mDummySurfaceTexture = SurfaceTexture(DUMMY_TEXTURE_NAME)
-                mCamera!!.setPreviewTexture(mDummySurfaceTexture)
-            } else {
-                mDummySurfaceView = SurfaceView(mContext)
-                mCamera!!.setPreviewDisplay(mDummySurfaceView!!.holder)
-            }
+            mDummySurfaceTexture = SurfaceTexture(DUMMY_TEXTURE_NAME)
+            mCamera!!.setPreviewTexture(mDummySurfaceTexture)
+
             mCamera!!.startPreview()
 
             mProcessingThread = Thread(mFrameProcessor)
@@ -328,9 +304,11 @@ private constructor() {
                 return this
             }
 
-            mCamera = createCamera()
-            mCamera!!.setPreviewDisplay(surfaceHolder)
-            mCamera!!.startPreview()
+            val camera = createCamera()
+            camera.setPreviewDisplay(surfaceHolder)
+            camera.startPreview()
+
+            mCamera = camera
 
             mProcessingThread = Thread(mFrameProcessor)
             mFrameProcessor!!.setActive(true)
@@ -915,8 +893,8 @@ private constructor() {
          */
         @SuppressLint("Assert")
         internal fun release() {
-            assert(mProcessingThread!!.state == Thread.State.TERMINATED)
-            mDetector!!.release()
+            assert(mProcessingThread?.state == Thread.State.TERMINATED)
+            mDetector?.release()
             mDetector = null
         }
 
