@@ -28,6 +28,7 @@ class MainActivity : Activity(), View.OnClickListener {
         statusMessage = findViewById(R.id.status_message)
         barcodeValue = findViewById(R.id.barcode_value)
         autoFocus = findViewById(R.id.auto_focus)
+        autoFocus.isChecked = true
         useFlash = findViewById(R.id.use_flash)
 
         findViewById<View>(R.id.read_barcode).setOnClickListener(this)
