@@ -117,7 +117,8 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
 
     @SuppressLint("InlinedApi")
     private fun createCameraSource(autoFocus: Boolean, useFlash: Boolean) {
-        val barcodeDetector = BarcodeDetector.Builder(applicationContext).build()
+        val barcodeDetector = BarcodeDetector.Builder(applicationContext)
+                .setBarcodeFormats(Barcode.QR_CODE).build()
         val barcodeFactory = BarcodeTrackerFactory(mGraphicOverlay!!, this)
         barcodeDetector.setProcessor(
                 MultiProcessor.Builder<Barcode>(barcodeFactory).build())
