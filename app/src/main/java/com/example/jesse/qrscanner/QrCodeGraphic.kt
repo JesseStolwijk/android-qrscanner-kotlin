@@ -8,7 +8,7 @@ import com.example.jesse.qrscanner.ui.camera.GraphicOverlay
 import com.google.android.gms.vision.barcode.Barcode
 
 
-class BarcodeGraphic internal constructor(overlay: GraphicOverlay<*>) : GraphicOverlay.Graphic(overlay as GraphicOverlay<GraphicOverlay.Graphic>) {
+class QrCodeGraphic internal constructor(overlay: GraphicOverlay<*>) : GraphicOverlay.Graphic(overlay as GraphicOverlay<GraphicOverlay.Graphic>) {
 
     var id: Int = 0
 

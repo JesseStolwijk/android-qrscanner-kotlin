@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".BarcodeCaptureActivity"
+        <activity android:name=".QrCodeCaptureActivity"
             android:label="Read Barcode"/>
     </application>
 

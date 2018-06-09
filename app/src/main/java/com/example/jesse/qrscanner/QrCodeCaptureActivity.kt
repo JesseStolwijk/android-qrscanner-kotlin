@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.hardware.Camera
-import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresPermission
 import android.support.design.widget.Snackbar
@@ -38,11 +37,11 @@ import java.io.IOException
  * rear facing camera. During detection overlay graphics are drawn to indicate the position,
  * size, and ID of each barcode.
  */
-class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.BarcodeUpdateListener {
+class QrCodeCaptureActivity : AppCompatActivity(), QrCodeGraphicTracker.BarcodeUpdateListener {
 
     private var mCameraSource: CameraSource? = null
     private var mPreview: CameraSourcePreview? = null
-    private var mGraphicOverlay: GraphicOverlay<BarcodeGraphic>? = null
+    private var mGraphicOverlay: GraphicOverlay<QrCodeGraphic>? = null
 
     // helper objects for detecting taps and pinches.
     private var scaleGestureDetector: ScaleGestureDetector? = null
@@ -119,7 +118,7 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
     private fun createCameraSource(autoFocus: Boolean, useFlash: Boolean) {
         val barcodeDetector = BarcodeDetector.Builder(applicationContext)
                 .setBarcodeFormats(Barcode.QR_CODE).build()
-        val barcodeFactory = BarcodeTrackerFactory(mGraphicOverlay!!, this)
+        val barcodeFactory = QrCodeTrackerFactory(mGraphicOverlay!!, this)
         barcodeDetector.setProcessor(
                 MultiProcessor.Builder<Barcode>(barcodeFactory).build())
 

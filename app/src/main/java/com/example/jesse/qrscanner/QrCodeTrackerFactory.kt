@@ -6,11 +6,11 @@ import com.google.android.gms.vision.MultiProcessor
 import com.google.android.gms.vision.Tracker
 import com.google.android.gms.vision.barcode.Barcode
 
-internal class BarcodeTrackerFactory(private val mGraphicOverlay: GraphicOverlay<BarcodeGraphic>,
-                                     private val mContext: Context) : MultiProcessor.Factory<Barcode> {
+internal class QrCodeTrackerFactory(private val mGraphicOverlay: GraphicOverlay<QrCodeGraphic>,
+                                    private val mContext: Context) : MultiProcessor.Factory<Barcode> {
 
     override fun create(barcode: Barcode): Tracker<Barcode> {
-        val graphic = BarcodeGraphic(mGraphicOverlay)
-        return BarcodeGraphicTracker(mGraphicOverlay, graphic, mContext)
+        val graphic = QrCodeGraphic(mGraphicOverlay)
+        return QrCodeGraphicTracker(mGraphicOverlay, graphic, mContext)
     }
 }

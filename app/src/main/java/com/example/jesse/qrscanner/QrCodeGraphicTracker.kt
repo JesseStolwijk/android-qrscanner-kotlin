@@ -7,9 +7,9 @@ import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.Tracker
 import com.google.android.gms.vision.barcode.Barcode
 
-class BarcodeGraphicTracker(private val mOverlay: GraphicOverlay<BarcodeGraphic>,
-                            private var mGraphic: BarcodeGraphic,
-                            context: Context) : Tracker<Barcode>()  {
+class QrCodeGraphicTracker(private val mOverlay: GraphicOverlay<QrCodeGraphic>,
+                           private var mGraphic: QrCodeGraphic,
+                           context: Context) : Tracker<Barcode>()  {
 
     private val mBarcodeUpdateListener: BarcodeUpdateListener
 

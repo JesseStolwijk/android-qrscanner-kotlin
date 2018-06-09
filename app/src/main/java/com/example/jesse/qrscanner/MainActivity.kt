@@ -35,9 +35,9 @@ class MainActivity : Activity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         if(v.id == R.id.read_barcode) {
-            val intent = Intent(this, BarcodeCaptureActivity::class.java)
-            intent.putExtra(BarcodeCaptureActivity.AutoFocus, autoFocus.isChecked)
-            intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked)
+            val intent = Intent(this, QrCodeCaptureActivity::class.java)
+            intent.putExtra(QrCodeCaptureActivity.AutoFocus, autoFocus.isChecked)
+            intent.putExtra(QrCodeCaptureActivity.UseFlash, useFlash.isChecked)
 
             startActivityForResult(intent, RC_BARCODE_CAPTURE)
         }
@@ -47,7 +47,7 @@ class MainActivity : Activity(), View.OnClickListener {
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
-                    val barcode = data.getParcelableExtra<Barcode>(BarcodeCaptureActivity.BarcodeObject)
+                    val barcode = data.getParcelableExtra<Barcode>(QrCodeCaptureActivity.BarcodeObject)
                     statusMessage.setText(R.string.barcode_success)
                     barcodeValue.setText(barcode.displayValue)
                     Log.d(TAG, "Barcode read: " + barcode.displayValue)
