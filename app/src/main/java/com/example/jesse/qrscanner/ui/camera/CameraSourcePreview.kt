@@ -68,9 +68,7 @@ class CameraSourcePreview(private val mContext: Context, attrs: AttributeSet) : 
     }
 
     fun stop() {
-        if (mCameraSource != null) {
-            mCameraSource!!.stop()
-        }
+        mCameraSource?.stop()
     }
 
     fun release() {
@@ -94,7 +92,7 @@ class CameraSourcePreview(private val mContext: Context, attrs: AttributeSet) : 
                 } else {
                     mOverlay!!.setCameraInfo(max, min, mCameraSource!!.cameraFacing)
                 }
-                mOverlay!!.clear()
+                mOverlay!!. clear()
             }
             mStartRequested = false
         }

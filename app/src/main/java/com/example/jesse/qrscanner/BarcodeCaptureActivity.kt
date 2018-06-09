@@ -55,8 +55,8 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
         super.onCreate(icicle)
         setContentView(R.layout.barcode_capture)
 
-        mPreview = findViewById<View>(R.id.preview) as CameraSourcePreview
-        mGraphicOverlay = findViewById<View>(R.id.graphicOverlay) as GraphicOverlay<BarcodeGraphic>
+        mPreview = findViewById(R.id.preview)
+        mGraphicOverlay = findViewById(R.id.graphicOverlay)
 
         // read parameters from the intent used to launch the activity.
         val autoFocus = intent.getBooleanExtra(AutoFocus, false)
@@ -95,10 +95,8 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
             return
         }
 
-        val thisActivity = this
-
         val listener = View.OnClickListener {
-            ActivityCompat.requestPermissions(thisActivity, permissions,
+            ActivityCompat.requestPermissions(this, permissions,
                     RC_HANDLE_CAMERA_PERM)
         }
 
@@ -119,9 +117,7 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
 
     @SuppressLint("InlinedApi")
     private fun createCameraSource(autoFocus: Boolean, useFlash: Boolean) {
-        val context = applicationContext
-
-        val barcodeDetector = BarcodeDetector.Builder(context).build()
+        val barcodeDetector = BarcodeDetector.Builder(applicationContext).build()
         val barcodeFactory = BarcodeTrackerFactory(mGraphicOverlay!!, this)
         barcodeDetector.setProcessor(
                 MultiProcessor.Builder<Barcode>(barcodeFactory).build())
@@ -185,7 +181,7 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
             return
         }
 
-        if (grantResults.size != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source")
             // we have permission, so create the camerasource
             val autoFocus = intent.getBooleanExtra(AutoFocus, false)
@@ -195,7 +191,7 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
         }
 
         Log.e(TAG, "Permission not granted: results len = " + grantResults.size +
-                " Result code = " + if (grantResults.size > 0) grantResults[0] else "(empty)")
+                " Result code = " + if (grantResults.isNotEmpty()) grantResults[0] else "(empty)")
 
         val listener = DialogInterface.OnClickListener { dialog, id -> finish() }
 
@@ -253,13 +249,13 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
         var bestDistance = java.lang.Float.MAX_VALUE
         for (graphic in mGraphicOverlay!!.getGraphics()) {
             val barcode = graphic.barcode
-            if (barcode!!.getBoundingBox().contains(x.toInt(), y.toInt())) {
+            if (barcode!!.boundingBox.contains(x.toInt(), y.toInt())) {
                 // Exact hit, no need to keep looking.
                 best = barcode
                 break
             }
-            val dx = x - barcode.getBoundingBox().centerX()
-            val dy = y - barcode.getBoundingBox().centerY()
+            val dx = x - barcode.boundingBox.centerX()
+            val dy = y - barcode.boundingBox.centerY()
             val distance = dx * dx + dy * dy  // actually squared distance
             if (distance < bestDistance) {
                 best = barcode
@@ -278,9 +274,8 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
     }
 
     private inner class CaptureGestureListener : GestureDetector.SimpleOnGestureListener() {
-        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-            return onTap(e.rawX, e.rawY) || super.onSingleTapConfirmed(e)
-        }
+        override fun onSingleTapConfirmed(e: MotionEvent) =
+                onTap(e.rawX, e.rawY) || super.onSingleTapConfirmed(e)
     }
 
     private inner class ScaleListener : ScaleGestureDetector.OnScaleGestureListener {
@@ -298,9 +293,7 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
          * only wants to update scaling factors if the change is
          * greater than 0.01.
          */
-        override fun onScale(detector: ScaleGestureDetector): Boolean {
-            return false
-        }
+        override fun onScale(detector: ScaleGestureDetector) = false
 
         /**
          * Responds to the beginning of a scaling gesture. Reported by
@@ -314,9 +307,7 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
          * sense, onScaleBegin() may return false to ignore the
          * rest of the gesture.
          */
-        override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
-            return true
-        }
+        override fun onScaleBegin(detector: ScaleGestureDetector) = true
 
         /**
          * Responds to the end of a scale gesture. Reported by existing
@@ -336,7 +327,10 @@ class BarcodeCaptureActivity : AppCompatActivity(), BarcodeGraphicTracker.Barcod
     }
 
     override fun onBarcodeDetected(barcode: Barcode) {
-        //do something with barcode data returned
+        val data = Intent()
+        data.putExtra(BarcodeObject, barcode)
+        setResult(CommonStatusCodes.SUCCESS, data)
+        finish()
     }
 
     companion object {
